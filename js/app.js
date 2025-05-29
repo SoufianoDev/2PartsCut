@@ -49,9 +49,28 @@ const download2Btn = document.getElementById('download2');
 const downloadZipBtn = document.getElementById('downloadZip');
 const newFileBtn = document.getElementById('newFile');
 
+// Check if SharedArrayBuffer is available (required for FFmpeg WASM)
+function isSharedArrayBufferAvailable() {
+    return typeof SharedArrayBuffer !== 'undefined';
+}
+
+// Check if the page is cross-origin isolated (required for SharedArrayBuffer)
+function isCrossOriginIsolated() {
+    return window.crossOriginIsolated === true;
+}
+
 // Initialize FFmpeg when the page loads
 document.addEventListener('DOMContentLoaded', async () => {
     try {
+        // First check for required browser features
+        if (!isSharedArrayBufferAvailable() || !isCrossOriginIsolated()) {
+            throw new Error(
+                !isSharedArrayBufferAvailable() 
+                    ? 'SharedArrayBuffer is not available in your browser.' 
+                    : 'Cross-Origin Isolation is not enabled.'
+            );
+        }
+        
         if (!createFFmpeg) {
             // Try loading FFmpeg from global object if not already defined
             if (window.FFmpeg) {
@@ -62,11 +81,23 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
         
-        // Create FFmpeg instance
+        // Create FFmpeg instance with multiple CDN fallbacks
+        const cdnOptions = [
+            'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js',
+            'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/ffmpeg-core/0.11.0/ffmpeg-core.js'
+        ];
+        
+        // Try the first CDN
         ffmpeg = createFFmpeg({
             log: true,
-            corePath: 'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js',
-            logger: () => {}, // Suppress verbose logging
+            corePath: cdnOptions[0],
+            logger: (message) => {
+                // Only log errors to console
+                if (typeof message === 'string' && message.includes('error')) {
+                    console.error('FFmpeg:', message);
+                }
+            },
             progress: (progress) => {
                 // Optional progress tracking
                 console.log('FFmpeg progress:', progress);
@@ -75,7 +106,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         // Pre-load FFmpeg to avoid issues later
         console.log('Loading FFmpeg...');
-        await ffmpeg.load();
+        
+        try {
+            await ffmpeg.load();
+        } catch (loadError) {
+            console.warn('Failed to load FFmpeg from primary CDN, trying fallbacks...');
+            
+            // Try fallback CDNs if the first one fails
+            for (let i = 1; i < cdnOptions.length; i++) {
+                try {
+                    ffmpeg = createFFmpeg({
+                        log: true,
+                        corePath: cdnOptions[i],
+                        logger: () => {}, // Suppress verbose logging
+                    });
+                    await ffmpeg.load();
+                    console.log(`FFmpeg loaded successfully from fallback CDN ${i}`);
+                    break;
+                } catch (fallbackError) {
+                    if (i === cdnOptions.length - 1) {
+                        throw new Error('All FFmpeg CDN fallbacks failed');
+                    }
+                }
+            }
+        }
         
         // Show a welcome toast
         const welcomeToast = Toast.makeText(document.body, 'Welcome to 2PartsCut! Ready to split some videos?', Toast.LENGTH_SHORT);
@@ -84,14 +138,37 @@ document.addEventListener('DOMContentLoaded', async () => {
                     .setAnimation(Toast.SLIDE_IN_TOP_CENTER, Toast.SLIDE_OUT_TOP_CENTER)
                     .show();
         
-        console.log('FFmpeg web assembly loaded');
+        console.log('FFmpeg web assembly loaded successfully');
     } catch (error) {
         console.error('Error loading FFmpeg:', error);
-        const errorToast = Toast.makeText(document.body, 'Failed to load video processing tools. Please refresh the page.', Toast.LENGTH_LONG);
+        
+        // Show a more detailed error message based on the specific error
+        let errorMessage = 'Failed to load video processing tools. ';
+        
+        if (!isSharedArrayBufferAvailable()) {
+            errorMessage += 'Your browser does not support SharedArrayBuffer. Try using Chrome, Edge, or Firefox.';
+        } else if (!isCrossOriginIsolated()) {
+            errorMessage += 'Cross-Origin Isolation is not enabled. This is required for video processing.';
+        } else {
+            errorMessage += 'Please try refreshing the page or using a different browser.';
+        }
+        
+        const errorToast = Toast.makeText(document.body, errorMessage, Toast.LENGTH_LONG);
         errorToast.setStyle(Toast.STYLE_ERROR)
                   .setPosition(Toast.POSITION_TOP_RIGHT)
                   .setDismissible(true)
                   .show();
+                  
+        // Update UI to show compatibility error
+        const dropArea = document.getElementById('dropArea');
+        if (dropArea) {
+            dropArea.innerHTML = `
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Browser Compatibility Issue</h3>
+                <p>${errorMessage}</p>
+                <p>For best results, use Chrome, Edge, or Firefox and ensure you're accessing this site with HTTPS.</p>
+            `;
+        }
     }
 });
 

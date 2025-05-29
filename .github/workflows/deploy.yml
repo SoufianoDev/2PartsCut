@@ -28,10 +28,12 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./
           publish_branch: gh-pages
-          cname: ${{ secrets.CNAME }}
           force_orphan: true
           
-      - name: Set required headers for GitHub Pages
+      - name: Update _headers file for CORS
         run: |
-          echo 'Cross-Origin-Opener-Policy: same-origin' > ./_site/_headers
-          echo 'Cross-Origin-Embedder-Policy: require-corp' >> ./_site/_headers
+          echo 'Cross-Origin-Opener-Policy: same-origin' > ./_headers
+          echo 'Cross-Origin-Embedder-Policy: require-corp' >> ./_headers
+          
+      - name: Create .nojekyll file
+        run: touch ./.nojekyll
