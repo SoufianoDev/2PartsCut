@@ -1,0 +1,29 @@
+# Git
+.git
+.gitignore
+git-clean.ps1
+
+# Node.js
+node_modules
+npm-debug.log
+
+# IDE
+.vscode
+*.code-workspace
+.idea
+
+# Build artifacts
+dist
+build
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Logs
+logs
+*.log
+
+# Temporary files
+.tmp
+.temp
