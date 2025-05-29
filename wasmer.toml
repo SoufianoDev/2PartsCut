@@ -1,0 +1,13 @@
+[entrypoint]
+command = "node src/server/server.js"
+
+[http]
+port = 8080
+
+[fs]
+public = "./public"
+
+[package]
+name = "2partscut"
+version = "1.0.0"
+description = "Split videos into two equal parts with browser-based processing"
