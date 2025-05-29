@@ -33,12 +33,12 @@ jobs:
       - name: Create build directory
         run: mkdir -p dist
         
+      - name: Create .nojekyll file
+        run: touch ./.nojekyll
+        
       - name: Copy static files to dist
         run: |
           cp -r index.html privacy.html terms.html css js _headers .nojekyll dist/
-          
-      - name: Create .nojekyll file
-        run: touch ./dist/.nojekyll
           
       - name: Update _headers file for CORS
         run: |
