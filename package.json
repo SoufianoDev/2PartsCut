@@ -1,6 +1,6 @@
 {
   "name": "2partscut",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "A client-side web application to split videos into two equal parts",
   "scripts": {
     "start": "node src/server/server.js",
@@ -9,7 +9,8 @@
     "build:prod": "node src/build.js --prod",
     "start:prod": "npm run build:prod && node src/server/server.js",
     "build:watch": "nodemon --watch src/typescript --ext ts --exec 'npm run build'",
-    "deploy:wasmer": "wasmer deploy"
+    "deploy:wasmer": "wasmer deploy",
+    "deploy:wasmer:sdk": "node src/deploy-wasmer.js"
   },
   "keywords": [
     "ffmpeg",
@@ -25,6 +26,7 @@
   "dependencies": {
     "@ffmpeg/core": "^0.11.0",
     "@ffmpeg/ffmpeg": "^0.11.6",
+    "@wasmer/sdk": "^0.9.0",
     "express": "^5.1.0"
   },
   "devDependencies": {

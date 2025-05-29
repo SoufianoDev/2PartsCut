@@ -1,13 +1,14 @@
-[entrypoint]
-command = "node src/server/server.js"
+[package]
+name = "2partscut"
+version = "1.0.4"
+description = "Split videos into two equal parts with browser-based processing"
 
-[http]
-port = 8080
+[commands]
+serve = "static-web-server -d public -p ${PORT=8080} --cors-allow-origins='*' --cors-allow-headers='Cross-Origin-Opener-Policy, Cross-Origin-Embedder-Policy, Content-Type'"
 
 [fs]
 public = "./public"
 
-[package]
-name = "2partscut"
-version = "1.0.0"
-description = "Split videos into two equal parts with browser-based processing"
+[http.response.headers]
+"Cross-Origin-Opener-Policy" = "same-origin"
+"Cross-Origin-Embedder-Policy" = "require-corp"

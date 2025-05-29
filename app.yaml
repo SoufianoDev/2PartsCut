@@ -1,0 +1,5 @@
+name: '2PartsCut'
+app_id: da_R9EIBt1Uq1xO
+owner: soufianodev
+package: '.'
+kind: wasmer.io/App.v0

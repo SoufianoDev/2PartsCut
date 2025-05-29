@@ -5,6 +5,12 @@ const net = require('net');
 const { build } = require('esbuild');
 const { execSync } = require('child_process');
 
+// Log environment information for debugging
+console.log('Node.js version:', process.version);
+console.log('Current directory:', process.cwd());
+console.log('__dirname:', __dirname);
+console.log('Environment:', process.env.NODE_ENV || 'development');
+
 const PORT = process.env.PORT || 8080;
 
 const MIME_TYPES = {
@@ -43,9 +49,36 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  let filePath = req.url === '/' 
-    ? path.join(__dirname, 'index.html') 
-    : path.join(__dirname, req.url.split('?')[0]);
+  // Explicitly prioritize the public/index.html file
+  // This ensures we're always serving the correct file
+  let filePath;
+  if (req.url === '/') {
+    // For root URL, always use the public/index.html file
+    const publicIndexPath = path.join(process.cwd(), 'public', 'index.html');
+    console.log('Checking for public index at:', publicIndexPath);
+    
+    if (fs.existsSync(publicIndexPath)) {
+      filePath = publicIndexPath;
+      console.log('Using public/index.html');
+    } else {
+      // Fallback to root index.html if public one doesn't exist
+      filePath = path.join(process.cwd(), 'index.html');
+      console.log('Falling back to root index.html');
+    }
+  } else {
+    // For other URLs, look in public directory first
+    const urlPath = req.url.split('?')[0];
+    const publicPath = path.join(process.cwd(), 'public', urlPath);
+    
+    if (fs.existsSync(publicPath)) {
+      filePath = publicPath;
+    } else {
+      // Fallback to root directory
+      filePath = path.join(process.cwd(), urlPath);
+    }
+  }
+  
+  console.log('Attempting to serve file:', filePath);
 
   const ext = path.extname(filePath);
   const contentType = MIME_TYPES[ext] || 'application/octet-stream';
@@ -108,14 +141,26 @@ const server = http.createServer((req, res) => {
 // Build TypeScript CAPTCHA module before starting server
 console.log('Building TypeScript CAPTCHA module...');
 try {
-  // Run the build script
-  execSync('node build.js', { stdio: 'inherit' });
-  console.log('TypeScript CAPTCHA module built successfully!');
+  // Check if build.js exists before running it
+  const buildScriptPath = path.join(process.cwd(), 'build.js');
+  if (fs.existsSync(buildScriptPath)) {
+    console.log('Found build script at:', buildScriptPath);
+    execSync('node build.js', { stdio: 'inherit' });
+    console.log('TypeScript CAPTCHA module built successfully!');
+  } else {
+    console.log('No build.js found at', buildScriptPath, '- skipping build step');
+  }
 } catch (error) {
   console.error('Failed to build TypeScript CAPTCHA module:', error.message);
-  process.exit(1);
+  // Don't exit process on error, just log it
+  console.log('Continuing server startup despite build error');
 }
 
-server.listen(PORT, () => {
-  console.log(`✓ Server running at http://localhost:${PORT}/`);
+// Listen on all interfaces (0.0.0.0), not just localhost
+// This is critical for Wasmer Edge deployment
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`✓ Server running on port ${PORT}`);
+  console.log(`✓ CORS headers for FFmpeg are enabled`);
+  console.log(`✓ Cross-Origin-Opener-Policy: same-origin`);
+  console.log(`✓ Cross-Origin-Embedder-Policy: require-corp`);
 });
