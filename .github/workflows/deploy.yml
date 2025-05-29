@@ -27,6 +27,16 @@ jobs:
       - name: Install dependencies
         run: npm install
         
+      - name: Create .nojekyll file
+        run: touch ./.nojekyll
+        
+      - name: Create _headers file with CORS settings
+        run: |
+          echo '/*' > ./_headers
+          echo '  Cross-Origin-Opener-Policy: same-origin' >> ./_headers
+          echo '  Cross-Origin-Embedder-Policy: require-corp' >> ./_headers
+          echo '  Cross-Origin-Resource-Policy: cross-origin' >> ./_headers
+          
       - name: Build and Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
@@ -34,11 +44,3 @@ jobs:
           publish_dir: ./
           publish_branch: gh-pages
           force_orphan: true
-          
-      - name: Update _headers file for CORS
-        run: |
-          echo 'Cross-Origin-Opener-Policy: same-origin' > ./_headers
-          echo 'Cross-Origin-Embedder-Policy: require-corp' >> ./_headers
-          
-      - name: Create .nojekyll file
-        run: touch ./.nojekyll
