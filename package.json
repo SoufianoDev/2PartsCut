@@ -1,0 +1,24 @@
+{
+  "name": "2partscut",
+  "version": "1.0.0",
+  "description": "A client-side web application to split videos into two equal parts",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "ffmpeg",
+    "video",
+    "split",
+    "client-side",
+    "webassembly",
+    "javascript",
+    "nodejs"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@ffmpeg/core": "^0.11.0",
+    "@ffmpeg/ffmpeg": "^0.11.6"
+  }
+}

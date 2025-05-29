@@ -1,0 +1,99 @@
+/* Theme Variables */
+:root {
+  /* Light Mode (Default) */
+  --bg-color: #f9fafb;
+  --card-bg-color: #ffffff;
+  --text-color: #374151;
+  --heading-color: #1f2937;
+  --border-color: #e5e7eb;
+  --primary-color: #4a6cf7;
+  --secondary-color: #6d28d9;
+  --accent-color: #00A7E8;
+  --success-color: #10b981;
+  --error-color: #ef4444;
+  --warning-color: #f59e0b;
+  --shadow-color: rgba(0, 0, 0, 0.05);
+  --shadow-strong: rgba(0, 0, 0, 0.1);
+  --drop-area-bg: #f3f4f6;
+  --progress-bg: #e5e7eb;
+  --header-bg: linear-gradient(135deg, #4a6cf7 0%, #8a5cf6 100%);
+  --footer-bg: #ffffff;
+  --file-details-bg: #f3f4f6;
+
+}
+
+[data-theme="dark"] {
+  --bg-color: #121212;
+  --card-bg-color: #1e1e1e;
+  --text-color: #e5e7eb;
+  --heading-color: #f9fafb;
+  --border-color: #374151;
+  --primary-color: #4a6cf7;
+  --secondary-color: #8b5cf6;
+  --accent-color: #00A7E8;
+  --success-color: #10b981;
+  --error-color: #ef4444;
+  --warning-color: #f59e0b;
+  --shadow-color: rgba(0, 0, 0, 0.2);
+  --shadow-strong: rgba(0, 0, 0, 0.4);
+  --drop-area-bg: #2d3748;
+  --progress-bg: #374151;
+  --header-bg: linear-gradient(135deg, #3a4cb7 0%, #6a3cb6 100%);
+  --footer-bg: #1e1e1e;
+  --file-details-bg: #2d3748;
+
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  margin-left: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+  transform: rotate(15deg);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.theme-toggle svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+.theme-toggle .moon {
+  display: block;
+}
+
+.theme-toggle .sun {
+  display: none;
+}
+
+[data-theme="dark"] .theme-toggle .moon {
+  display: none;
+}
+
+[data-theme="dark"] .theme-toggle .sun {
+  display: block;
+}
+
+/* Transition Effects */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+header, footer, .upload-container, .progress-container, .results-container, .drop-area, .file-details {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}

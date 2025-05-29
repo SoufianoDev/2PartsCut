@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2PartsCut - Split Videos Locally</title>
+    <!-- Favicon -->
+    <!-- Inline favicon as data URI to avoid external dependencies -->
+    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiBmaWxsPSIjNGE2Y2Y3Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZmlsbD0id2hpdGUiPjJQPC90ZXh0Pjwvc3ZnPg==" type="image/svg+xml">
+    <!-- CSS Styles -->
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Extension message handler to prevent console errors -->
+    <script src="js/extension-handler.js"></script>
+
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><span class="logo">2</span>PartsCut</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                    <li><a href="terms.html">Terms of Use</a></li>
+                    <li>
+                        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                            <svg class="moon" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                            </svg>
+                            <svg class="sun" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="5"></circle>
+                                <line x1="12" y1="1" x2="12" y2="3"></line>
+                                <line x1="12" y1="21" x2="12" y2="23"></line>
+                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                <line x1="1" y1="12" x2="3" y2="12"></line>
+                                <line x1="21" y1="12" x2="23" y2="12"></line>
+                                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                            </svg>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="intro">
+            <h2>Split Your Videos Into Two Equal Parts</h2>
+            <p>Fast, private, and completely in your browser - no uploads required!</p>
+        </section>
+
+        <section class="upload-container">
+            <div class="drop-area" id="dropArea">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Drag & Drop Your Video</h3>
+                <p>or</p>
+                <label for="fileInput" class="btn">Browse Files</label>
+                <input type="file" id="fileInput" accept="video/*" style="display: none;">
+                <p class="file-limit">Maximum file size: 2000 MB</p>
+            </div>
+            <div id="fileInfo" class="file-info" style="display: none;">
+                <div class="file-details">
+                    <h3>Selected File:</h3>
+                    <p id="fileName"></p>
+                    <p id="fileSize"></p>
+                    <p id="fileDuration"></p>
+                </div>
+                <button id="processBtn" class="btn primary-btn">Split Video</button>
+                <button id="cancelBtn" class="btn secondary-btn">Cancel</button>
+            </div>
+        </section>
+
+        <section id="progress" class="progress-container" style="display: none;">
+            <h3>Processing Video...</h3>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <p id="progressText">0%</p>
+            <p class="processing-info processing-pulse">Your video is being processed locally. Please don't close this tab.</p>
+        </section>
+
+        <section id="results" class="results-container" style="display: none;">
+            <h3>Your Video Has Been Split!</h3>
+            <div class="parts-container">
+                <div class="part">
+                    <h4>First Half</h4>
+                    <div class="video-preview" id="preview1">
+                        <video id="video1" controls></video>
+                    </div>
+                    <button id="download1" class="btn download-btn">
+                        <i class="fas fa-download"></i> Download Part 1
+                    </button>
+                </div>
+                <div class="part">
+                    <h4>Second Half</h4>
+                    <div class="video-preview" id="preview2">
+                        <video id="video2" controls></video>
+                    </div>
+                    <button id="download2" class="btn download-btn">
+                        <i class="fas fa-download"></i> Download Part 2
+                    </button>
+                </div>
+            </div>
+            <div class="download-all">
+                <button id="downloadZip" class="btn primary-btn">
+                    <i class="fas fa-file-archive"></i> Download Both Parts (ZIP)
+                </button>
+                <button id="newFile" class="btn secondary-btn">Process Another Video</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 2PartsCut. All processing happens locally in your browser.</p>
+        </div>
+    </footer>
+
+    <!-- Toast.js notification container -->
+    <div id="toast-notification" class="toast-notification"></div>
+
+    <!-- Libraries -->
+    <script src="js/Toast.js"></script> <!-- Using local Toast.js -->
+    
+    <!-- FFmpeg from CDN - more reliable for browser compatibility -->
+    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
+    
+    <!-- JSZip library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    
+    <!-- GSAP Animation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <!-- Define createFFmpeg and fetchFile globally if not already defined -->
+    <script>
+        if (typeof FFmpeg === 'undefined') {
+            // Fallback definitions if FFmpeg fails to load
+            console.warn('FFmpeg not loaded properly, using fallback');
+            window.FFmpeg = { createFFmpeg: null, fetchFile: null };
+        }
+    </script>
+    
+    <!-- Browser compatibility check (must be before app.js if app.js uses Toast) -->
+    <script src="js/browser-check.js"></script>
+    
+    <!-- Theme switcher script -->
+    <script src="js/theme-switcher.js"></script>
+    
+
+    
+    <!-- App scripts (ensure ffmpeg.min.js is loaded before this) -->
+    <script src="js/app.js"></script>
+</body>
+</html>
