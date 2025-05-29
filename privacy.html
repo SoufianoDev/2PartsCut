@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - 2PartsCut</title>
+    <!-- CSS Styles -->
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Extension message handler to prevent console errors -->
+    <script src="js/extension-handler.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><span class="logo">2</span>PartsCut</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="privacy.html" class="active">Privacy Policy</a></li>
+                    <li><a href="terms.html">Terms of Use</a></li>
+                    <li>
+                        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                            <svg class="moon" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                            </svg>
+                            <svg class="sun" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="5"></circle>
+                                <line x1="12" y1="1" x2="12" y2="3"></line>
+                                <line x1="12" y1="21" x2="12" y2="23"></line>
+                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                <line x1="1" y1="12" x2="3" y2="12"></line>
+                                <line x1="21" y1="12" x2="23" y2="12"></line>
+                                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                            </svg>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="content-section">
+            <h2>Privacy Policy</h2>
+            <p>Last Updated: May 28, 2025</p>
+            
+            <div class="policy-content">
+                <h3>1. Introduction</h3>
+                <p>Welcome to 2PartsCut. We respect your privacy and are committed to protecting it through our compliance with this policy.</p>
+                
+                <h3>2. Information We Don't Collect</h3>
+                <p>2PartsCut is designed with your privacy in mind. We want to emphasize that:</p>
+                <ul>
+                    <li>We do not collect any personal information from you.</li>
+                    <li>We do not upload your video files to any server. All processing happens locally in your browser.</li>
+                    <li>We do not use cookies or any other tracking technologies.</li>
+                    <li>We do not store any information about the videos you process.</li>
+                    <li>We do not have access to the content of your videos.</li>
+                </ul>
+                
+                <h3>3. How Our Application Works</h3>
+                <p>2PartsCut is a fully client-side web application, which means:</p>
+                <ul>
+                    <li>All video processing happens directly in your browser using WebAssembly technology (ffmpeg.wasm).</li>
+                    <li>Your video files never leave your device.</li>
+                    <li>The split video parts are generated locally and can be downloaded directly to your device.</li>
+                    <li>No data is transmitted to our servers or any third-party servers during the video processing.</li>
+                </ul>
+                
+                <h3>4. Browser Storage</h3>
+                <p>We use your browser's temporary storage capabilities only for the purpose of processing your videos. This data is automatically cleared when you close the application tab or window.</p>
+                
+                <h3>5. Third-Party Libraries</h3>
+                <p>We use the following third-party libraries to provide our service:</p>
+                <ul>
+                    <li>ffmpeg.wasm - For video processing</li>
+                    <li>JSZip - For creating ZIP archives</li>
+                    <li>Toast.js - For notifications</li>
+                </ul>
+                <p>These libraries operate entirely within your browser and do not transmit any data externally.</p>
+                
+                <h3>6. Children's Privacy</h3>
+                <p>Our application is intended for use by all ages. Since we do not collect any personal information, there are no special provisions for children's privacy.</p>
+                
+                <h3>7. Changes to Our Privacy Policy</h3>
+                <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page.</p>
+                
+                <h3>8. Contact Us</h3>
+                <p>If you have any questions about this Privacy Policy, please contact us at:</p>
+                <p>privacy@2partscut.example.com</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 2PartsCut. All processing happens locally in your browser.</p>
+        </div>
+    </footer>
+    <!-- Toast notification container -->
+    <div id="toast-notification" class="toast-notification"></div>
+
+    <!-- Libraries -->
+    <script src="js/Toast.js"></script>
+    
+    <!-- Theme switcher script -->
+    <script src="js/theme-switcher.js"></script>
+</body>
+</html>
